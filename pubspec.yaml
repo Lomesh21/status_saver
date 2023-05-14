@@ -39,7 +39,9 @@ dependencies:
   permission_handler: ^10.2.0
   path_provider:
   file_picker: ^5.3.0
-
+  image_gallery_saver:
+  video_player:
+  video_compress:
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+
+import '../constants.dart';
 class ImagePage extends StatefulWidget {
   ImagePage({required this.path});
   String path;
@@ -13,35 +17,42 @@ class _ImagePageState extends State<ImagePage> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFD4D576),
+        elevation: 0,
+        backgroundColor: AppConstants.primaryColor,
         title: Text(
           "Status Saver",
           style: TextStyle(
               fontSize: 22,
-              color: Color(0xFFD76767),
+              color: Color(0xFFFFFFFF),
               fontWeight: FontWeight.w600),
         ),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))
+        ),
       ),
-      body: Container(
-        margin: EdgeInsets.all(20),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Image(
-            image: NetworkImage(widget.path),
-            height: MediaQuery.of(context).size.height * 0.75,
-            width: MediaQuery.of(context).size.width * 0.9,
-            fit: BoxFit.cover,
+      body: Center(
+        child: Container(
+          margin: EdgeInsets.all(20),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image(
+              image: FileImage(File(widget.path)),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () async{
+            ImageGallerySaver.saveFile(widget.path!).then((value){
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Image Saved'),));
+            });
+          },
           style: ElevatedButton.styleFrom(
-            primary: Color(0xFFD4D576),
+            primary: AppConstants.primaryColor,
             onPrimary: Colors.white,
-            shadowColor: Colors.greenAccent,
             elevation: 3,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0)),
@@ -49,10 +60,9 @@ class _ImagePageState extends State<ImagePage> {
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 15.0),
-            child: Text('Download',
+            child: Text('Save',
                 style: TextStyle(
                     fontSize: 22,
-                    color: Color(0xFFD76767),
                     fontWeight: FontWeight.w600)),
           ),
         ),
